@@ -114,7 +114,7 @@ Pointer<T,size>::Pointer(T *t){
         arraySize = size;
         isArray = true;
     }
-   PtrDetails<T> pd = PtrDetails<T>(addr, arraySize)
+   PtrDetails<T> pd = PtrDetails<T>(addr, size);
     pd.refcount++;
     refContainer.push_back(pd);
 }
@@ -124,12 +124,17 @@ Pointer<T,size>::Pointer(const Pointer &ob){
 
     // TODO: Implement Pointer constructor
     // Lab: Smart Pointer Project Lab
+   
+    arraySize = ob->arraySize;
+    isArray = ob->isArray;
+    addr = ob->addr;
+    first = ob->first;
+    refContainer = ob->refContainer;
     typename std::list<PtrDetails<T> >::iterator p;
-    p = findPtrInfo(ob.addr);
-    p->refcount++
-    if(ob.isArray)
-        p->isArray = true;
-
+    p = findPtrInfo(addr);
+    if(p->refcount){
+        p->refcount++;
+    }
 }
 
 // Destructor for Pointer.
@@ -182,6 +187,15 @@ T *Pointer<T, size>::operator=(T *t){
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
+    addr = t;
+    arraySize = size;
+    if(size > 0)
+        {
+          isArray = true;
+        }
+    PtrDetails<T> pd = PtrDetails<T>(t, size);
+    Pointer<T, size>::refContainer.push_back(pd);
+   //Pointer<T, size>::Pointer(*t);
 
 }
 // Overload assignment of Pointer to Pointer.
@@ -190,7 +204,11 @@ Pointer<T, size> &Pointer<T, size>::operator=(Pointer &rv){
 
     // TODO: Implement operator==
     // LAB: Smart Pointer Project Lab
-    typename std::list<PtrDetails<T> >::iterator p;
+    arraySize = rv.arraySize;
+    isArray = rv.isArray;
+    addr = rv.addr;
+    first = rv.first;
+    refContainer = rv.refContainer;
     
 
 }
